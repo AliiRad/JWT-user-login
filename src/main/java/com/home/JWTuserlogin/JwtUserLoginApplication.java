@@ -18,33 +18,28 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class JwtUserLoginApplication {
 
-	private final UserRepository userRepository;
-	private final RoleRepository roleRepository;
-	private final PasswordEncoder passwordEncoder;
-
-
-	@Bean
-	public void run(){
-
-		roleRepository.save(Role.builder()
-				.authority("USER")
-				.build());
-
-		Set<Role> adminRole = new HashSet<>();
-		adminRole.add(new Role("ADMIN"));
-
-		User admin = User.builder()
-				.username("admin")
-				.password("admin123")
-				.authorities(adminRole)
-				.build();
-
-		userRepository.save(admin);
-	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(JwtUserLoginApplication.class, args);
 	}
 	
+	@Bean
+	CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder){
+		return args -> {
+			if (roleRepository.findByAuthority("ADMIN").isPresent()) return;
+			Role adminRole = roleRepository.save(new Role("ADMIN"));
+			roleRepository.save(new Role("USER"));
+
+			Set<Role> roles = new HashSet<>();
+			roles.add(adminRole);
+
+			User admin = new User("admin", passwordEncoder.encode("admin123"), roles);
+
+			userRepository.save(admin);
+
+		};
+	}
+
+	
+
 
 }

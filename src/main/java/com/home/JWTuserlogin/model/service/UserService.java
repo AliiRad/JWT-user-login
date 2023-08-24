@@ -2,7 +2,7 @@ package com.home.JWTuserlogin.model.service;
 
 import com.home.JWTuserlogin.model.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,6 +14,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username);
+        if(userRepository.findByUsername(username).isPresent())return userRepository.findByUsername(username).get();
+        throw new UsernameNotFoundException("username is invalid");
     }
 }
