@@ -22,12 +22,12 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(unique = true)
     private String username;
 
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER
-    ,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> authorities;
 
     public User(String username, String password, Set<Role> authorities) {

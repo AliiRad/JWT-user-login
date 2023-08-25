@@ -24,22 +24,19 @@ public class JwtUserLoginApplication {
 	
 	@Bean
 	CommandLineRunner run(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder){
-		return args -> {
-			if (roleRepository.findByAuthority("ADMIN").isPresent()) return;
-			Role adminRole = roleRepository.save(new Role("ADMIN"));
-			roleRepository.save(new Role("USER"));
+			return args -> {
+				if (roleRepository.findByAuthority("ADMIN").isPresent()) return;
+				Role adminRole = roleRepository.save(new Role("ADMIN"));
+				roleRepository.save(new Role("USER"));
 
-			Set<Role> roles = new HashSet<>();
-			roles.add(adminRole);
+				Set<Role> role = new HashSet<>();
+				role.add(adminRole);
 
-			User admin = new User("admin", passwordEncoder.encode("admin123"), roles);
+				User admin = new User("admin", passwordEncoder.encode("admin123"), role);
 
-			userRepository.save(admin);
-
-		};
+				userRepository.save(admin);
+			};
 	}
-
-	
 
 
 }
