@@ -15,7 +15,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @SpringBootApplication
-@RequiredArgsConstructor
 public class JwtUserLoginApplication {
 
 	public static void main(String[] args) {
